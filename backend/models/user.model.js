@@ -68,9 +68,9 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   User.beforeCreate(async (user) => {
-    // You can add logic here before a user is created, e.g., hashing the password
-    user.password = await bcrypt.hash(user.password, 10);
     const randomString = Math.random().toString(36).substring(2, 7);
+    
+    user.password = await bcrypt.hash(user.password, 10);
     user.username = `${user.name.toLowerCase().replace(/\s+/g, '')}${randomString}`;
   });
 
