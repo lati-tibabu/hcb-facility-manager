@@ -3,7 +3,7 @@ const { Model, UUIDV4 } = require('sequelize');
 const { Status } = require("../constants/enums.constant");
 
 module.exports = (sequelize, DataTypes) => {
-  class site extends Model {
+  class Site extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,9 +11,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // this.hasMany(models.UserSiteAssignment, {
+      //   foreignKey: "siteId",
+      //   as: "assignments"
+      // });
+
+      this.belongsToMany(
+        models.User, {
+          through: "UserSiteAssignment",
+          foreignKey: "siteId",
+          otherKey: "userId",
+          as: "users"
+        }
+      )
     }
   }
-  site.init({
+  Site.init({
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -34,12 +47,12 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       type: DataTypes.ENUM(...Object.values(Status)),
       allowNull: false,
-      defaultValue: Status.ACTIVE
+      defaultValue: Status.ACTIVE,
     },
   }, {
     sequelize,
     modelName: 'Site',
     tableName: 'Sites'
   });
-  return site;
+  return Site;
 };

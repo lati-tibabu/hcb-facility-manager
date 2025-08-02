@@ -12,6 +12,20 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // this.hasMany(models.UserSiteAssignment, {
+      //   foreignKey: "userId",
+      //   as: "assignments"
+      // });
+  
+      this.belongsToMany(
+        models.Site, {
+          through: "UserSiteAssignment",
+          foreignKey: "userId",
+          otherKey: "siteId",
+          as: "sites"
+        }
+      );
+
     }
   }
   User.init({

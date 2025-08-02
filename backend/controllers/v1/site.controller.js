@@ -2,6 +2,12 @@ const { Site } = require('../../models');
 
 const createSite = async (req, res) => {
     try{
+        if (Array.isArray(req.body)){
+            const sites = await Site.bulkCreate(req.body, {
+                individualHooks: true
+            });
+            return res.status(201).json(sites);
+        }
         const site = await Site.create(req.body);
         res.status(201).json(site);
     }catch(error){
